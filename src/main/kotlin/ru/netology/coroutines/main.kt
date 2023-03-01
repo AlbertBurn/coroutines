@@ -35,18 +35,18 @@ fun main() {
                     async {
                         val author = getAuthor(client, post.id)
                         collection.add(author)
-                    }.await()
+                    }
                     collection.add(post)
                     async { getComments(client, post.id)
                         .map { comment  ->
                             async {
                                 val author = getAuthor(client, comment.id)
                                 collection.add(author)
-                            }.await()
+                            }
                             collection.add(comment)
                         }
-                    }.await()
-                }
+                    }
+                }.awaitAll()
             collection.map {
                 println(it)
             }
